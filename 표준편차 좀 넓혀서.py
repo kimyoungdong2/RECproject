@@ -81,7 +81,7 @@ for i in range(2,12):
 for i in range(2,12):
     ws.cell(row=i+39,column=2).value=0.05*(i-1)
 
-in_advance_List=[0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.1]
+in_advance_List=[0.01,0.05,0.10,0.15,0.20,0.25,0.30,0.35,0.40,0.45]
 
 The_end=0
 All_Fair=0
@@ -334,9 +334,7 @@ for one in range(len(Standard_Deviation_List)):
             The_end+=Up1/Down
         ws.cell(row=2+two+(one*13),column=3).value=The_end/10
         ws.cell(row=2+two+(one*13),column=4).value=All_Fair/10
-        ws.cell(row=2+two+(one*13),column=5).value=(len(First_Get))/(len(First_All))
-        ws.cell(row=2+two+(one*13),column=6).value=(len(Second_Get))/(len(Second_All))
-        ws.cell(row=2+two+(one*13),column=7).value=(len(Third_Get))/(len(Third_All))
+        ws.cell(row=2+two+(one*13),column=5).value=(len(First_Get)+len(Second_Get)+len(Third_Get))/(len(First_All)+len(Second_All)+len(Third_All))
         The_end=0
         All_Fair=0
 wb.save("연습1.xlsx")
