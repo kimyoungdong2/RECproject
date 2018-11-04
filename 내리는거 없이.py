@@ -69,6 +69,8 @@ ws["B1"],ws["B14"],ws["B27"],ws["B40"]="알파 퍼센트(공정성)","알파 퍼
 ws["A1"],ws["A14"],ws["A27"],ws["A40"]="표준편차","표준편차","표준편차","표준편차"
 ws["A2"],ws["A15"],ws["A28"],ws["A41"]="5","10","20","30"
 ws["C1"],ws["C14"],ws["C27"],ws["C40"]="효율성","효율성","효율성","효율성"
+ws["D1"],ws["D14"],ws["D27"],ws["D40"]="Jain Index","Jain Index","Jain Index","Jain Index"
+ws["E1"],ws["E14"],ws["E27"],ws["E40"]="예정","예정","예정","예정"
 
 for i in range(2,12):
     ws.cell(row=i,column=2).value=0.05*(i-1)
@@ -79,9 +81,11 @@ for i in range(2,12):
 for i in range(2,12):
     ws.cell(row=i+39,column=2).value=0.05*(i-1)
 
-in_advance_List=[0.05,0.1,0.15,0.2,0.25,0.3,0.35,0.4,0.45,0.5]
+in_advance_List=[0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.1]
 
 The_end=0
+All_Fair=0
+
 
 
 for one in range(len(Standard_Deviation_List)):
@@ -135,11 +139,19 @@ for one in range(len(Standard_Deviation_List)):
             Down_tmp=[]
             Down_tmp=First_All+Second_All+Third_All
             Down_tmp.sort(reverse=True,key=lambda x:x[0])
+            Downs=0
             for i in range(len(Down_tmp)):
-                if Down< First_Capacity+Second_Capacity+Third_Capacity: #그 용량을 넘으면 안 됨.
-                    Down+=Down_tmp[i][0]
+                if Downs< First_Capacity+Second_Capacity+Third_Capacity: #그 용량을 넘으면 안 됨.
+                    Down+=Down_tmp[i][0]*Down_tmp[i][1]
+                    Downs+=Down_tmp[i][0]
                 else:
                     break
+            
+            
+            First_Middle_Sum=in_advance*sum((First_All[i][1]) for i in range(len(First_All)))   # First_Middle_Sum = 몇 %를 먼저 구할것인지.
+            Second_Middle_Sum=in_advance*sum((Second_All[i][1]) for i in range(len(Second_All)))  #나중에 이 부분을 바꾸면 됨@@@@@@@@@@
+            Third_Middle_Sum=in_advance*sum((Third_All[i][1]) for i in range(len(Third_All)))
+                
             
             
             for i in range(len(First_All)):
@@ -151,23 +163,11 @@ for one in range(len(Standard_Deviation_List)):
             for i in range(len(Third_All)):
                 Third_All[i][1]=Third_All[i][1]*(1-in_advance)
             
-            First_Quantitative_Price.sort(reverse = True)
-            First_Min=First_Quantitative_Price[0]
             
-            Second_Quantitative_Price.sort(reverse = True)
-            Second_Min=Second_Quantitative_Price[0]
-            
-            Third_Quantitative_Price.sort(reverse = True)
-            Third_Min=Third_Quantitative_Price[0]
-            
-            First_Middle_Sum=in_advance*sum(First_Min for i in range(len(First_All)))   # First_Middle_Sum = 몇 %를 먼저 구할것인지.
-            Second_Middle_Sum=in_advance*sum(Second_Min for i in range(len(Second_All)))  #나중에 이 부분을 바꾸면 됨@@@@@@@@@@
-            Third_Middle_Sum=in_advance*sum(Third_Min for i in range(len(Third_All)))
-                
             
             First_Sum = []
             for i in range(First_Number):
-                if sum(First_Sum) <First_Capacity * 1.3-First_Middle_Sum:   #1.3배 한 후 미리 산 용량은 빼기
+                if sum(First_Sum) <(First_Capacity-First_Middle_Sum) * 1.3:   #1.3배 한 후 미리 산 용량은 빼기
                     try:
                         First_Sum.append(First_All[i][1])
                     except IndexError:
@@ -201,7 +201,7 @@ for one in range(len(Standard_Deviation_List)):
             
             Second_Sum = []
             for i in range(len(Second_All2)):
-                if sum(Second_Sum) < Second_Capacity * 1.3-Second_Middle_Sum:
+                if sum(Second_Sum) < (Second_Capacity-Second_Middle_Sum) * 1.3:
                     try:
                         Second_Sum.append(Second_All2[i][1])
                     except IndexError:
@@ -233,7 +233,7 @@ for one in range(len(Standard_Deviation_List)):
             
             Third_Sum = []
             for i in range(len(Third_All2)):
-                if sum(Third_Sum) < Third_Capacity * 1.3-Third_Middle_Sum:
+                if sum(Third_Sum) < (Third_Capacity-Third_Middle_Sum) * 1.3:
                     try:
                         Third_Sum.append(Third_All2[i][1])
                     except IndexError:
@@ -319,18 +319,25 @@ for one in range(len(Standard_Deviation_List)):
             
             
             All_Fairness_Index=(First_Fairness_Index+Second_Fairness_Index+Third_Fairness_Index)/3
-            
+            All_Fair+=All_Fairness_Index
             Up=0
-            for i in range(len(First_Get)):
-                Up+=First_Get[i][0]
-            for i in range(len(Second_Get)):
-                Up+=Second_Get[i][0]
-            for i in range(len(Third_Get)):
-                Up+=Third_Get[i][0]
-                
-            Up = Up +in_advance*(First_Middle_Sum+ Second_Middle_Sum+Third_Middle_Sum)    #이미 Up에다가 in_advance를 더함
-            The_end+=Up/Down
+            for i in range(len(First_Final_Pass)):
+                Up+=First_Final_Pass[i][0]*First_Final_Pass[i][1]
+            for i in range(len(Second_Final_Pass)):
+                Up+=Second_Final_Pass[i][0]*Second_Final_Pass[i][1]
+            for i in range(len(Third_Final_Pass)):
+                Up+=Third_Final_Pass[i][0]*Third_Final_Pass[i][1]
+            Down_tmp.sort()
+            SSS=Down_tmp[0][0]   
+            #SSS=sum((Down_tmp[i][0]) for i in range(len(Down_tmp)))/len(Down_tmp)
+            Up1 = Up +(First_Middle_Sum+Second_Middle_Sum+Third_Middle_Sum)*SSS    #이미 Up에다가 in_advance를 더함
+            The_end+=Up1/Down
         ws.cell(row=2+two+(one*13),column=3).value=The_end/10
+        ws.cell(row=2+two+(one*13),column=4).value=All_Fair/10
+        ws.cell(row=2+two+(one*13),column=5).value=(len(First_Get))/(len(First_All))
+        ws.cell(row=2+two+(one*13),column=6).value=(len(Second_Get))/(len(Second_All))
+        ws.cell(row=2+two+(one*13),column=7).value=(len(Third_Get))/(len(Third_All))
         The_end=0
+        All_Fair=0
 wb.save("연습1.xlsx")
 wb.close()
