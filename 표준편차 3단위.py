@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+#표준편차 5단위
 #예정된 곳에서 팔린 REC 비율
 import openpyxl
 import random
