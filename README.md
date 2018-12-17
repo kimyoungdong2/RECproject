@@ -6,3 +6,7 @@
 ```bash
 $ python main.py
 ```
+
+## Author
+* [홍익대학교 산업공학과 석혜성 교수님]
+* [홍익대학교 산업공학과 김영동 학생](https://github.com/KimYoungDong2)
