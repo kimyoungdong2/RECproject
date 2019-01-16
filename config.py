@@ -54,7 +54,7 @@ for i in range(2,12):
     ws.cell(row=i+39,column=2).value=0.05*(i-1)
 
 
-in_advance_List=[0.05,0.1,0.15,0.2,0.25,0.3,0.35,0.4,0.45,0.5]
+in_advance_List=[0.01,0.03,0.05,0.07,0.09,0.11,0.13,0.15,0.17,0.19]
             
 The_end=0
 All_Fair=0
