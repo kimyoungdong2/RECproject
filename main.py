@@ -256,5 +256,5 @@ for one in range(len(config.Standard_Deviation_List)):
         config.ws.cell(row=2+two+(one*13),column=5).value=(len(First_Get)+len(Second_Get)+len(Third_Get))/(len(First_All)+len(Second_All)+len(Third_All))
         config.The_end=0
         config.All_Fair=0
-config.wb.save("연습1.xlsx")
+config.wb.save("결과물.xlsx")
 config.wb.close()
