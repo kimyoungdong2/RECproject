@@ -56,5 +56,5 @@ for i in range(2,12):
 
 in_advance_List=[0.02,0.04,0.06,0.08,0.10,0.12,0.14,0.16,0.18,0.20]
             
-The_end=0
-All_Fair=0
+efficiency=0
+Jain_fairness_index=0
